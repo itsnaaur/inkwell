@@ -1,105 +1,124 @@
-# Ajaia Docs
+Here is the fully polished, elite-tier `README.md` that perfectly aligns with your refined file structure. All legacy references (like the old `collectionGroup` indexing rules and Firebase Storage) have been completely stripped out, and your actual custom scripts and performance milestones are front and center.
 
-A document editor built with Next.js 14, Firebase, and Tiptap. Create rich-text documents, upload `.txt` and `.md` files, and share documents with other users by email.
+---
 
-## Stack
+# Ajaia Docs — Production Ready Workspace
 
-- Next.js 14 (App Router) + TypeScript
-- Firebase Auth, Firestore, Storage
-- Tiptap v2/v3 rich-text editor
-- Tailwind CSS
-- Vercel deployment
+A high performance, lightweight document editor built with Next.js 14, Firebase, and Tiptap. Engineered with a decoupled document persistence architecture, user targeted sharing indexes, and a 30 day soft delete lifecycle optimized for high velocity product teams.
 
-## Setup
+---
 
-1. Install dependencies:
+## 🚀 Key Engineering Enhancements
+
+To deliver a production grade system within the strict development window, the codebase prioritizes performance engineering and absolute data integrity:
+
+* **Decoupled Data Architecture:** Root document references only house light metadata parameters (title, flags, timestamps). The heavy rich text canvas state is separated into a dedicated `/documents/{id}/content/main` subcollection, preventing massive payload overhead on dashboard list queries.
+* **Targeted Recipient Indexes:** Bypassed slow, rule heavy collection group queries by implementing a high speed user centric indexing matrix (`/users/{uid}/sharedWithMe`) ensuring clean security perimeters and instant sidebar rendering.
+* **Complete Soft Delete Lifecycle:** Implemented a full 30 day trash workspace matching professional document systems. Documents get flagged as `isDeleted` with recovery pathways and automated client side session garbage collection.
+* **Single Socket Stream Shell:** Centralized the real time state engine inside a global application `DocumentsProvider` wrapper to completely cut out duplicate Firestore network listeners.
+
+---
+
+## 🛠️ Integrated Technical Stack
+
+* **Framework:** Next.js 14 (App Router) + TypeScript
+* **Editor Base:** Tiptap v3 Headless Core Engine
+* **Database & Security:** Firestore (Client SDK Core Layer)
+* **Session Layer:** Firebase Authentication
+* **Styling Matrix:** Tailwind CSS
+* **Test Architecture:** Jest Unit Framework
+* **Deployment Platform:** Vercel Continuous Delivery
+
+---
+
+## 📂 Supplementary Workspace Documentation
+
+For an in depth review of technical decisions, AI collaborative metrics, and project scaffolding guidelines, refer to the accompanying markdown logs in this directory:
+
+* `ARCHITECTURE.md` — Complete systems design review, Firestore security rule layouts, and performance strategies.
+* `AI_WORKFLOW.md` — Strategic analysis of AI tool acceleration, syntax generation validation, and human engineering overrides.
+* `ajaia-battle-plan.md` — The original development roadmap, core objectives, and initialization boundaries.
+
+---
+
+## 🔧 Local Workspace Execution
+
+### 1. Install Project Dependencies
 
 ```bash
 npm install
+
 ```
 
-2. Copy environment variables:
+### 2. Configure Environment State
+
+Duplicate the environment template asset:
 
 ```bash
 cp .env.example .env.local
+
 ```
 
-3. Fill in Firebase client config and Admin service account values in `.env.local`.
+Open `.env.local` and populate the fields with your active Firebase Web App variables:
 
-4. In Firebase Console:
-   - Enable Email/Password auth
-   - Create Firestore and Storage
-   - Paste `firestore.rules` into Firestore Rules and publish
-   - Add test users and seed `/users/{uid}` profiles
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY=your_web_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=ajaia-docs-45934.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=ajaia-docs-45934
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=ajaia-docs-45934.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=265550196322
+NEXT_PUBLIC_FIREBASE_APP_ID=your_web_app_id
 
-5. Run locally:
-
-```bash
-npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+### 3. Database Security Rule Publishing
 
-## Test Accounts
+1. Access the **Firebase Console** linked to your active project instance.
+2. Under **Firestore Database**, navigate to the **Rules** workspace tab.
+3. Paste the complete code block found inside your local `firestore.rules` file and click **Publish**.
 
-Seed both accounts (Auth + Firestore profiles):
+### 4. Seed Preconfigured Test Profiles
+
+Execute the native user seeding tool to immediately register the required validation accounts inside both Firebase Authentication and the Firestore `/users` registry:
 
 ```bash
 npm run seed
+
 ```
 
-- `alice@ajaia.dev` / `Test1234!`
-- `bob@ajaia.dev` / `Test1234!`
+* **User A (Owner Profile):** `alice@ajaia.dev` | Password: `Test1234!`
+* **User B (Collaborator Profile):** `bob@ajaia.dev` | Password: `Test1234!`
 
-## Scripts
+---
 
-- `npm run dev` — start development server
-- `npm run seed` — create/update Alice and Bob test accounts
-- `npm run build` — production build
-- `npm run start` — start production server
-- `npm run test` — run Jest unit tests
-- `npm run lint` — run ESLint
+## 🏃 Native Script Registry
 
-## Environment Variables
+* `npm run dev` — Launches the local Next.js development server workflow.
+* `npm run dev:clean` — Completely purges the local structural `.next` and Webpack system caches to guarantee a completely clean build pipeline (essential for avoiding file locking races on Windows environments).
+* `npm run seed` — Runs the data seeding engine to provision User A and User B.
+* `npm run build` — Compiles the TypeScript layers into highly optimized production targets.
+* `npm run test` — Fires the Jest test blocks verifying the markdown conversion utilities.
+* `npm run lint` — Runs style validations to maintain code maintainability metrics.
 
-```env
-NEXT_PUBLIC_FIREBASE_API_KEY=
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
-NEXT_PUBLIC_FIREBASE_APP_ID=
+---
 
-FIREBASE_ADMIN_PROJECT_ID=
-FIREBASE_ADMIN_CLIENT_EMAIL=
-FIREBASE_ADMIN_PRIVATE_KEY=
-```
+## 🛑 Scope Cut Boundaries
 
-## Features
+To maintain software quality and delivery speed within the timebox, the following items are explicitly out of scope:
 
-- Email/password authentication
-- Create, rename, edit, save, and reopen documents
-- Rich text: bold, italic, underline, H1/H2/H3, bullet and numbered lists
-- Upload `.txt` and `.md` files into editable documents
-- Share documents by email
-- Firestore-backed persistence with security rules
+* Real time character pointer position tracking (Yjs or mesh network sync structures).
+* Microsoft Word `.docx` parsing (limited cleanly to high speed `.txt` and `.md` file reading).
+* Detailed paragraph comment or suggestion threads.
+* Unlimited workspace version history rollbacks.
+* Granular multi tier permissions (strict Owner vs Collaborator framework enforced).
 
-## Out of Scope
+---
 
-- Real-time collaboration (Yjs/CRDTs)
-- `.docx` parsing
-- Version history
-- Role-based permissions beyond owner/shared access
-- Comments
+## 🌐 Production Deployment Guidelines
 
-## Deployment
-
-Deploy to Vercel and add all environment variables in the project settings. Add your Vercel domain to Firebase Auth authorized domains.
+This project is fully structured for simple, single step deployment on Vercel. Ensure all variables mapped inside `.env.local` are mirrored exactly within your Vercel Project Settings portal. Once deployed, copy your production Vercel deployment domain and paste it securely into the **Authorized Domains** list inside the **Authentication Settings** panel in the Firebase Console.
 
 ```bash
 npx vercel --prod
+
 ```
-
-## Firestore Index
-
-Shared documents use a `collectionGroup` query on `shares`. Firebase may prompt you to create an index on first use — follow the console link to create it automatically.
