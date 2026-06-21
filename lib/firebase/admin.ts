@@ -1,3 +1,9 @@
+/**
+ * Firebase Admin SDK — server-side only (app/api/* routes).
+ *
+ * The UI uses lib/firebase/client.ts instead. Admin credentials are optional
+ * for deployment unless you wire the API routes into the frontend.
+ */
 import { cert, getApps, initializeApp } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
 import { getFirestore } from 'firebase-admin/firestore'

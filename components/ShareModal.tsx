@@ -1,5 +1,10 @@
 'use client'
 
+/**
+ * Share by email — dual-write flow:
+ * 1. /documents/{id}/shares/{targetUid}  (permission source for rules)
+ * 2. /users/{targetUid}/sharedWithMe/{id} (fast sidebar index — see lib/sharing.ts)
+ */
 import { FormEvent, useCallback, useEffect, useState } from 'react'
 import {
   collection,

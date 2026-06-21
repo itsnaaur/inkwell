@@ -1,8 +1,11 @@
 'use client'
 
+/**
+ * Root auth shell — wraps the entire app in app/layout.tsx.
+ * Persists Firebase session state and exposes sign-in/up/out helpers.
+ */
 import {
   createContext,
-  useContext,
   useEffect,
   useState,
   type ReactNode,
@@ -26,7 +29,7 @@ interface AuthContextValue {
   signUp: (email: string, password: string, displayName: string) => Promise<void>
 }
 
-const AuthContext = createContext<AuthContextValue | undefined>(undefined)
+export const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
@@ -51,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signUp = async (email: string, password: string, displayName: string) => {
     const credential = await createUserWithEmailAndPassword(auth, email, password)
     await updateProfile(credential.user, { displayName })
+    // Mirror auth profile into Firestore for email-based share lookups.
     await setDoc(doc(db, 'users', credential.user.uid), {
       email,
       displayName,
@@ -63,12 +67,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   )
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider')
-  }
-  return context
 }

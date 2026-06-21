@@ -1,7 +1,3 @@
-Here is the fully polished, elite-tier `README.md` that perfectly aligns with your refined file structure. All legacy references (like the old `collectionGroup` indexing rules and Firebase Storage) have been completely stripped out, and your actual custom scripts and performance milestones are front and center.
-
----
-
 # Ajaia Docs — Production Ready Workspace
 
 A high performance, lightweight document editor built with Next.js 14, Firebase, and Tiptap. Engineered with a decoupled document persistence architecture, user targeted sharing indexes, and a 30 day soft delete lifecycle optimized for high velocity product teams.
@@ -31,13 +27,28 @@ To deliver a production grade system within the strict development window, the c
 
 ---
 
-## 📂 Supplementary Workspace Documentation
+## 📂 Project Layout & Documentation
 
-For an in depth review of technical decisions, AI collaborative metrics, and project scaffolding guidelines, refer to the accompanying markdown logs in this directory:
+Source code follows a layered Next.js structure. See **`docs/PROJECT_STRUCTURE.md`** for the full directory map and reviewer notes.
 
-* `ARCHITECTURE.md` — Complete systems design review, Firestore security rule layouts, and performance strategies.
-* `AI_WORKFLOW.md` — Strategic analysis of AI tool acceleration, syntax generation validation, and human engineering overrides.
-* `ajaia-battle-plan.md` — The original development roadmap, core objectives, and initialization boundaries.
+| Path | Purpose |
+|------|---------|
+| `app/` | Routes, layouts, API handlers |
+| `components/` | UI components |
+| `providers/` | Auth + Firestore listener context |
+| `hooks/` | Consumer hooks (`useAuth`, `useDocuments`, `useTrash`) |
+| `lib/` | Business logic, Firebase clients, utilities |
+| `types/` | Shared TypeScript interfaces |
+| `scripts/` | Dev tooling (seed, cache clean) |
+| `docs/` | Architecture, AI workflow, battle plan |
+| `public/` | Static assets (`ajaia-logo.png`) |
+
+Supplementary documentation:
+
+* `docs/ARCHITECTURE.md` — Systems design, Firestore schema, performance strategies
+* `docs/AI_WORKFLOW.md` — AI-assisted development notes
+* `docs/ajaia-battle-plan.md` — Original development roadmap
+* `docs/PROJECT_STRUCTURE.md` — Folder layout and critical code paths
 
 ---
 

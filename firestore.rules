@@ -1,3 +1,10 @@
+// Ajaia Docs — Firestore security rules
+// Publish manually in Firebase Console → Firestore → Rules
+//
+// Key design choices:
+// - Owners read all their docs (active + trash) — required for ownerId list queries
+// - Shared users read active docs only via /shares/{uid} existence check
+// - Content subcollection inherits parent owner/shared/trash permissions
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {

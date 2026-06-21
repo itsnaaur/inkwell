@@ -5,7 +5,7 @@ import Logo from '@/components/Logo'
 import Sidebar from '@/components/Sidebar'
 import Button from '@/components/ui/Button'
 import LoadingState from '@/components/ui/LoadingState'
-import { useDocumentsContext } from '@/hooks/DocumentsProvider'
+import { useDocumentsContext } from '@/providers/DocumentsProvider'
 
 interface AppShellProps {
   children: React.ReactNode

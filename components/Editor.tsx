@@ -1,5 +1,11 @@
 'use client'
 
+/**
+ * Tiptap editor — debounced autosave to content subcollection.
+ *
+ * Hydration runs once per document to avoid cursor jumps from snapshot updates.
+ * Save debounce is 1500ms to limit Firestore write volume during typing.
+ */
 import { useEffect, useMemo, useRef } from 'react'
 import Underline from '@tiptap/extension-underline'
 import { EditorContent, useEditor } from '@tiptap/react'
@@ -84,6 +90,7 @@ export default function Editor({ docId, content, onSaveStatusChange }: EditorPro
 
   const hydratedForDoc = useRef<string | null>(null)
 
+  // One-time content hydration per doc — prevents ProseMirror reset on parent re-renders.
   useEffect(() => {
     if (!editor) return
     if (hydratedForDoc.current === docId) return

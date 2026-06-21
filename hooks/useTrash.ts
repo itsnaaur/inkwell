@@ -1,6 +1,6 @@
 'use client'
 
-import { useDocumentsContext } from '@/hooks/DocumentsProvider'
+import { useDocumentsContext } from '@/providers/DocumentsProvider'
 
 export function useTrash() {
   const { trashed, trashLoading } = useDocumentsContext()

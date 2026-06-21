@@ -1,3 +1,9 @@
+/**
+ * Browser Firebase SDK — used by all UI flows (auth, Firestore, uploads).
+ *
+ * Requires NEXT_PUBLIC_FIREBASE_* env vars at build time (Vercel project settings).
+ * Do not import this module from server components; use lib/firebase/admin.ts for API routes.
+ */
 import { initializeApp, getApps } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'

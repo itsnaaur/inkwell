@@ -1,3 +1,9 @@
+/**
+ * Sharing index — recipient-side lookup at /users/{uid}/sharedWithMe/{docId}.
+ *
+ * CRITICAL: Every grant/revoke must keep shares subcollection and sharedWithMe
+ * in sync. Shared sidebar reads sharedWithMe only (not collectionGroup queries).
+ */
 import {
   collection,
   deleteDoc,
@@ -56,6 +62,7 @@ export async function revokeAllSharedDocumentAccess(documentId: string) {
   await batch.commit()
 }
 
+/** Rebuild sharedWithMe entries after restore — shares subcollection is source of truth. */
 export async function backfillSharedDocumentAccess(
   documentId: string,
   ownerId: string,

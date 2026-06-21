@@ -1,3 +1,10 @@
+/**
+ * Document body persistence — content subcollection layer.
+ *
+ * CRITICAL: Editor JSON lives at /documents/{id}/content/main, not on the parent
+ * document. List queries only read lightweight metadata (title, dates, flags).
+ * loadDocumentContent() still reads legacy parent.content for older documents.
+ */
 import {
   deleteField,
   doc,
@@ -40,6 +47,7 @@ export async function saveDocumentContent(documentId: string, content: unknown) 
     { merge: true }
   )
 
+  // Strip legacy inline content from parent once migrated to subcollection.
   await updateDoc(doc(db, 'documents', documentId), {
     content: deleteField(),
     updatedAt: serverTimestamp(),

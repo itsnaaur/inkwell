@@ -1,3 +1,9 @@
+/**
+ * Trash lifecycle — soft delete, restore, and permanent purge.
+ *
+ * Documents are flagged isDeleted + deletedAt instead of immediate deletion.
+ * purgeExpiredTrashDocuments runs once per session (see DocumentsProvider).
+ */
 import {
   collection,
   doc,
@@ -55,6 +61,7 @@ export async function backfillActiveDocumentFields(documentIds: string[]) {
   )
 }
 
+/** Deletes parent doc, content subcollection, shares, and all sharedWithMe index rows. */
 export async function permanentlyDeleteDocument(documentId: string) {
   const [sharesSnapshot, contentSnapshot] = await Promise.all([
     getDocs(collection(db, 'documents', documentId, 'shares')),
@@ -84,6 +91,7 @@ export async function moveDocumentToTrash(documentId: string) {
     updatedAt: serverTimestamp(),
   })
 
+  // Collaborators lose access while document is in trash.
   await revokeAllSharedDocumentAccess(documentId)
 }
 

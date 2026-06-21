@@ -1,6 +1,7 @@
 'use client'
 
-import { useDocumentsContext, type DocumentItem } from '@/hooks/DocumentsProvider'
+import { useDocumentsContext } from '@/providers/DocumentsProvider'
+import type { DocumentItem } from '@/types/document'
 
 export type { DocumentItem }
 

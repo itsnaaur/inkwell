@@ -1,5 +1,12 @@
 'use client'
 
+/**
+ * Central Firestore listener hub for the authenticated app shell.
+ *
+ * CRITICAL: All document list state (owned, shared, trash) lives here so we
+ * attach exactly three onSnapshot listeners app-wide instead of one per page.
+ * Do not add duplicate listeners in page components.
+ */
 import {
   createContext,
   useContext,
@@ -17,18 +24,7 @@ import { db } from '@/lib/firebase/client'
 import { sortByDeletedAt, sortByUpdatedAt, toListItem } from '@/lib/documentList'
 import { isActiveDocument, purgeExpiredTrashDocuments, backfillActiveDocumentFields } from '@/lib/trash'
 import { useAuth } from '@/hooks/useAuth'
-
-export interface DocumentItem {
-  id: string
-  ownerId: string
-  ownerEmail: string
-  title: string
-  content: unknown
-  createdAt: unknown
-  updatedAt: unknown
-  isDeleted?: boolean
-  deletedAt?: unknown
-}
+import type { DocumentItem } from '@/types/document'
 
 interface DocumentsContextValue {
   owned: DocumentItem[]
@@ -92,6 +88,7 @@ export function DocumentsProvider({ children }: { children: ReactNode }) {
     setOwnedError('')
     setSharedError('')
 
+    // Run trash purge at most once per session — avoids extra writes on every navigation.
     const purgeKey = getPurgeSessionKey(user.uid)
     const today = new Date().toDateString()
     if (sessionStorage.getItem(purgeKey) !== today) {
@@ -102,6 +99,8 @@ export function DocumentsProvider({ children }: { children: ReactNode }) {
         })
     }
 
+    // Intentionally no isDeleted filter on owned query — Firestore rules require
+    // a single owner read rule; we filter active docs client-side instead.
     const ownedQuery = query(
       collection(db, 'documents'),
       where('ownerId', '==', user.uid)
@@ -113,6 +112,7 @@ export function DocumentsProvider({ children }: { children: ReactNode }) {
       where('isDeleted', '==', true)
     )
 
+    // Recipient index — see lib/sharing.ts. Avoids slow collectionGroup scans.
     const sharedQuery = collection(db, 'users', user.uid, 'sharedWithMe')
 
     const unsubscribeOwned = onSnapshot(
