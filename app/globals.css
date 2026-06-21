@@ -3,25 +3,147 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #f4f6fb;
+  --foreground: #0f172a;
+  --ajaia-navy: #001a72;
+  --ajaia-navy-light: #002d9c;
+  --ajaia-navy-dark: #001454;
+  --ajaia-navy-muted: #e8edf8;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+input,
+textarea,
+select {
+  color: #0f172a;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8;
+}
+
+.ProseMirror {
+  outline: none;
+  color: #0f172a;
+}
+
+.ProseMirror h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 1rem 0 0.5rem;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 1rem 0 0.5rem;
+}
+
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 1rem 0 0.5rem;
+}
+
+.ProseMirror p {
+  margin: 0.5rem 0;
+  line-height: 1.7;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+}
+
+.ProseMirror ul {
+  list-style: disc;
+}
+
+.ProseMirror ol {
+  list-style: decimal;
+}
+
+@layer components {
+  .input-field {
+    @apply mt-1.5 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400;
+  }
+
+  .input-field:focus {
+    border-color: var(--ajaia-navy);
+    box-shadow: 0 0 0 2px rgb(0 26 114 / 0.1);
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-white shadow-sm transition disabled:cursor-not-allowed disabled:opacity-60;
+    background-color: var(--ajaia-navy);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--ajaia-navy-light);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .card {
+    @apply rounded-2xl border border-slate-200/80 bg-white;
+    box-shadow: 0 1px 3px 0 rgb(0 26 114 / 0.04), 0 1px 2px -1px rgb(0 26 114 / 0.04);
+  }
+
+  .section-label {
+    @apply px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400;
+  }
+
+  .nav-item {
+    @apply flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm transition;
+  }
+
+  .nav-item-active {
+    @apply font-medium;
+    background-color: var(--ajaia-navy-muted);
+    color: var(--ajaia-navy);
+  }
+
+  .nav-item-inactive {
+    @apply text-slate-600 hover:bg-slate-100 hover:text-slate-900;
+  }
+
+  .spinner {
+    @apply animate-spin rounded-full border-2 border-slate-200;
+    border-top-color: var(--ajaia-navy);
+  }
+
+  .sidebar-scroll {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+
+  .sidebar-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .sidebar-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .sidebar-scroll::-webkit-scrollbar-thumb {
+    background-color: rgb(203 213 225 / 0.8);
+    border-radius: 9999px;
+  }
+
+  .sidebar-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(148 163 184 / 0.9);
   }
 }

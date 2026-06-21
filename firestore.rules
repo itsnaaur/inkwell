@@ -1,0 +1,83 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /users/{uid} {
+      allow read: if request.auth != null;
+      allow write: if request.auth.uid == uid;
+
+      match /sharedWithMe/{documentId} {
+        allow read: if request.auth.uid == uid;
+        allow create, update, delete: if request.auth.uid == get(/databases/$(database)/documents/documents/$(documentId)).data.ownerId;
+      }
+    }
+
+    match /documents/{docId} {
+      function isOwner() {
+        return request.auth.uid == resource.data.ownerId;
+      }
+
+      function isActiveDoc() {
+        return resource.data.isDeleted != true;
+      }
+
+      function isSharedWithUser() {
+        return exists(/databases/$(database)/documents/documents/$(docId)/shares/$(request.auth.uid));
+      }
+
+      // Owners can read all of their documents (active + trash).
+      // A single owner read rule is required for ownerId list queries.
+      allow read: if isOwner();
+
+      // Shared users can read active documents only
+      allow read: if isActiveDoc() && isSharedWithUser();
+
+      // Owner updates on active documents
+      allow update: if isOwner() && isActiveDoc();
+
+      // Owner updates on trashed documents (restore)
+      allow update: if isOwner() && resource.data.isDeleted == true;
+
+      allow delete: if isOwner() && resource.data.isDeleted == true;
+
+      // Create new active documents owned by the caller
+      allow create: if request.auth != null
+        && request.resource.data.ownerId == request.auth.uid
+        && request.resource.data.isDeleted == false;
+
+      match /shares/{shareUid} {
+        allow read: if request.auth.uid == resource.data.sharedWith;
+        allow read: if request.auth.uid == shareUid;
+        allow read, write, delete: if request.auth.uid == get(/databases/$(database)/documents/documents/$(docId)).data.ownerId;
+      }
+
+      match /content/{contentId} {
+        function parentData() {
+          return get(/databases/$(database)/documents/documents/$(docId)).data;
+        }
+
+        function parentIsOwner() {
+          return request.auth.uid == parentData().ownerId;
+        }
+
+        function parentIsActive() {
+          return parentData().isDeleted != true;
+        }
+
+        function parentIsSharedWithUser() {
+          return exists(/databases/$(database)/documents/documents/$(docId)/shares/$(request.auth.uid));
+        }
+
+        function parentIsTrashed() {
+          return parentData().isDeleted == true;
+        }
+
+        allow read: if parentIsOwner();
+        allow read: if parentIsActive() && parentIsSharedWithUser();
+        allow write: if parentIsOwner() && parentIsActive();
+        allow write: if parentIsActive() && parentIsSharedWithUser();
+        allow delete: if parentIsOwner() && parentIsTrashed();
+      }
+    }
+  }
+}
