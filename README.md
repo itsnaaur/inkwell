@@ -10,8 +10,8 @@ A high performance, lightweight document editor built with Next.js 15, Firebase,
 
 | Stage | Date | What it includes |
 |-------|------|------------------|
-| **Original timed build** ([`v1-4-hour-build`](https://github.com/itsnaaur/inkwell/tree/v1-4-hour-build)) | June 21, 2026 | Planned and built in about 4 hours with AI assistance: the app, its security rules, and its documentation |
-| **Later polish** | November 2, 2026 | Inkwell rename, bug fixes from testing, tighter security rules, edit conflict handling, and dependency upgrades, also with AI assistance |
+| **Original timed build** ([`v1-4-hour-build`](https://github.com/itsnaaur/inkwell/tree/v1-4-hour-build)) | June 21, 2026 | Planned and built in about 4 hours: the app, its security rules, and its documentation |
+| **Later polish** | November 2, 2026 | Inkwell rename, bug fixes from testing, tighter security rules, edit conflict handling, and dependency upgrades |
 
 ---
 
@@ -51,12 +51,11 @@ Source code follows a layered Next.js structure. See **`docs/PROJECT_STRUCTURE.m
 | `lib/` | Business logic, Firebase clients, utilities |
 | `types/` | Shared TypeScript interfaces |
 | `scripts/` | Dev tooling (seed, cache clean) |
-| `docs/` | Architecture, AI workflow, project structure |
+| `docs/` | Architecture, project structure |
 
 Supplementary documentation:
 
 * `docs/ARCHITECTURE.md` — Systems design, Firestore schema, performance strategies
-* `docs/AI_WORKFLOW.md` — AI-assisted development notes
 * `docs/PROJECT_STRUCTURE.md` — Folder layout and critical code paths
 
 ---

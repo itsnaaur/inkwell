@@ -66,4 +66,3 @@ ajaia/
 ## Further reading
 
 - `docs/ARCHITECTURE.md` — system design and tradeoffs
-- `docs/AI_WORKFLOW.md` — AI-assisted development notes
