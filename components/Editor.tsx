@@ -6,7 +6,7 @@
  * Hydration runs once per document to avoid cursor jumps from snapshot updates.
  * Save debounce is 1500ms to limit Firestore write volume during typing.
  */
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import {
@@ -19,13 +19,18 @@ import {
   ListOrdered,
   Underline as UnderlineIcon,
 } from 'lucide-react'
-import { saveDocumentContent } from '@/lib/documentContent'
+import {
+  DocumentConflictError,
+  loadDocumentContent,
+  saveDocumentContent,
+} from '@/lib/documentContent'
 import { EditorSkeleton } from '@/components/DocumentPageSkeleton'
 import { debounce } from '@/lib/utils'
 
 interface EditorProps {
   docId: string
   content: unknown
+  revision: number
   onSaveStatusChange: (status: 'idle' | 'saving' | 'saved') => void
 }
 
@@ -57,30 +62,48 @@ function ToolbarButton({
   )
 }
 
-export default function Editor({ docId, content, onSaveStatusChange }: EditorProps) {
+export default function Editor({ docId, content, revision, onSaveStatusChange }: EditorProps) {
   const onSaveStatusChangeRef = useRef(onSaveStatusChange)
   onSaveStatusChangeRef.current = onSaveStatusChange
 
   // Bumped on every edit so a finishing save can't report "saved" over newer changes.
   const editVersionRef = useRef(0)
   const hasUnsavedChangesRef = useRef(false)
+  const baseRevisionRef = useRef(revision)
+  const conflictRef = useRef(false)
+  const saveQueueRef = useRef<Promise<void>>(Promise.resolve())
+  const [saveProblem, setSaveProblem] = useState<'conflict' | 'failed' | null>(null)
+  const [resolving, setResolving] = useState(false)
 
-  const saveContent = useMemo(
-    () =>
-      debounce(async (json: unknown) => {
-        const savingVersion = editVersionRef.current
-        try {
-          await saveDocumentContent(docId, json)
-          if (savingVersion !== editVersionRef.current) return
-          hasUnsavedChangesRef.current = false
-          onSaveStatusChangeRef.current('saved')
-        } catch {
-          if (savingVersion !== editVersionRef.current) return
+  const saveContent = useMemo(() => {
+    const persist = async (json: unknown) => {
+      if (conflictRef.current) return
+
+      const savingVersion = editVersionRef.current
+      try {
+        baseRevisionRef.current = await saveDocumentContent(docId, json, baseRevisionRef.current)
+        setSaveProblem(null)
+        if (savingVersion !== editVersionRef.current) return
+        hasUnsavedChangesRef.current = false
+        onSaveStatusChangeRef.current('saved')
+      } catch (error) {
+        if (error instanceof DocumentConflictError) {
+          conflictRef.current = true
+          setSaveProblem('conflict')
           onSaveStatusChangeRef.current('idle')
+          return
         }
-      }, 1500),
-    [docId]
-  )
+        if (savingVersion !== editVersionRef.current) return
+        setSaveProblem('failed')
+        onSaveStatusChangeRef.current('idle')
+      }
+    }
+
+    // Saves run one at a time so each builds on the revision the previous one wrote.
+    return debounce((json: unknown) => {
+      saveQueueRef.current = saveQueueRef.current.then(() => persist(json))
+    }, 1500)
+  }, [docId])
 
   const editor = useEditor(
     {
@@ -92,6 +115,7 @@ export default function Editor({ docId, content, onSaveStatusChange }: EditorPro
       onUpdate: ({ editor: currentEditor }) => {
         editVersionRef.current += 1
         hasUnsavedChangesRef.current = true
+        if (conflictRef.current) return
         onSaveStatusChangeRef.current('saving')
         saveContent(currentEditor.getJSON())
       },
@@ -128,8 +152,59 @@ export default function Editor({ docId, content, onSaveStatusChange }: EditorPro
     if (!editor) return
     if (hydratedForDoc.current === docId) return
     editor.commands.setContent(content ?? '', { emitUpdate: false })
+    baseRevisionRef.current = revision
     hydratedForDoc.current = docId
-  }, [editor, content, docId])
+  }, [editor, content, revision, docId])
+
+  // Show someone else's saved changes when there is nothing local to lose.
+  // With unsaved edits the next save detects the conflict instead.
+  useEffect(() => {
+    if (!editor || hydratedForDoc.current !== docId) return
+    if (revision <= baseRevisionRef.current || hasUnsavedChangesRef.current) return
+
+    const { from } = editor.state.selection
+    editor.commands.setContent(content ?? '', { emitUpdate: false })
+    editor.commands.setTextSelection(Math.min(from, editor.state.doc.content.size))
+    baseRevisionRef.current = revision
+  }, [editor, content, revision, docId])
+
+  const resolveConflict = async (keepMine: boolean) => {
+    if (!editor) return
+
+    setResolving(true)
+    saveContent.flush()
+    await saveQueueRef.current
+
+    try {
+      const latest = await loadDocumentContent(docId)
+      baseRevisionRef.current = latest.revision
+      conflictRef.current = false
+      setSaveProblem(null)
+      editVersionRef.current += 1
+
+      if (keepMine) {
+        onSaveStatusChangeRef.current('saving')
+        saveContent(editor.getJSON())
+        saveContent.flush()
+      } else {
+        editor.commands.setContent(latest.body ?? '', { emitUpdate: false })
+        hasUnsavedChangesRef.current = false
+        onSaveStatusChangeRef.current('saved')
+      }
+    } catch {
+      setSaveProblem('conflict')
+    } finally {
+      setResolving(false)
+    }
+  }
+
+  const retrySave = () => {
+    if (!editor) return
+    setSaveProblem(null)
+    onSaveStatusChangeRef.current('saving')
+    saveContent(editor.getJSON())
+    saveContent.flush()
+  }
 
   if (!editor) {
     return <EditorSkeleton />
@@ -137,6 +212,37 @@ export default function Editor({ docId, content, onSaveStatusChange }: EditorPro
 
   return (
     <div className="card overflow-hidden">
+      {saveProblem === 'conflict' && (
+        <div role="alert" className="border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          <p>Someone else changed this document. Your latest edits have not been saved.</p>
+          <div className="mt-2 flex flex-wrap gap-3 font-medium">
+            <button
+              type="button"
+              disabled={resolving}
+              onClick={() => resolveConflict(false)}
+              className="underline disabled:opacity-50"
+            >
+              Load latest version
+            </button>
+            <button
+              type="button"
+              disabled={resolving}
+              onClick={() => resolveConflict(true)}
+              className="underline disabled:opacity-50"
+            >
+              Overwrite with my version
+            </button>
+          </div>
+        </div>
+      )}
+      {saveProblem === 'failed' && (
+        <div role="alert" className="border-b border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <p>Your latest edits could not be saved. Check your connection or access to this document.</p>
+          <button type="button" onClick={retrySave} className="mt-2 font-medium underline">
+            Try again
+          </button>
+        </div>
+      )}
       <div className="flex flex-wrap items-center gap-1 border-b border-slate-100 bg-slate-50/80 p-2.5">
         <ToolbarButton
           active={editor.isActive('bold')}

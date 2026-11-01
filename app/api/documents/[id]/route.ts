@@ -25,14 +25,15 @@ async function userCanAccessDocument(documentId: string, uid: string) {
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const authResult = await verifyRequestToken(request)
   if ('error' in authResult) {
     return NextResponse.json({ error: authResult.error }, { status: authResult.status })
   }
 
-  const access = await userCanAccessDocument(params.id, authResult.uid)
+  const access = await userCanAccessDocument(id, authResult.uid)
   if (access.notFound) {
     return NextResponse.json({ error: 'Document not found.' }, { status: 404 })
   }
@@ -54,14 +55,15 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const authResult = await verifyRequestToken(request)
   if ('error' in authResult) {
     return NextResponse.json({ error: authResult.error }, { status: authResult.status })
   }
 
-  const access = await userCanAccessDocument(params.id, authResult.uid)
+  const access = await userCanAccessDocument(id, authResult.uid)
   if (access.notFound) {
     return NextResponse.json({ error: 'Document not found.' }, { status: 404 })
   }

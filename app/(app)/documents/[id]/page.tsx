@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { use, useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, CheckCircle2, Loader2, Pencil, Share2, Trash2 } from 'lucide-react'
@@ -20,7 +20,7 @@ import { isActiveDocument, moveDocumentToTrash } from '@/lib/trash'
 import { formatTimestamp } from '@/lib/utils'
 
 interface DocumentPageProps {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 interface DocumentData {
@@ -32,11 +32,13 @@ interface DocumentData {
   isDeleted?: boolean
 }
 
-export default function DocumentPage({ params }: DocumentPageProps) {
+export default function DocumentPage(props: DocumentPageProps) {
+  const params = use(props.params)
   const router = useRouter()
   const { user } = useAuth()
   const [documentData, setDocumentData] = useState<DocumentData | null>(null)
   const [editorContent, setEditorContent] = useState<unknown>(null)
+  const [contentRevision, setContentRevision] = useState(0)
   const [contentReady, setContentReady] = useState(false)
   const [hasAccess, setHasAccess] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -103,7 +105,8 @@ export default function DocumentPage({ params }: DocumentPageProps) {
           setHasAccess(true)
 
           const loadedContent = await loadDocumentContent(params.id, data.content)
-          setEditorContent(loadedContent)
+          setEditorContent(loadedContent.body)
+          setContentRevision(loadedContent.revision)
           setContentReady(true)
         }
 
@@ -132,6 +135,7 @@ export default function DocumentPage({ params }: DocumentPageProps) {
       (snapshot) => {
         if (!snapshot.exists()) return
         setEditorContent(snapshot.data().body ?? null)
+        setContentRevision(snapshot.data().revision ?? 0)
         setContentReady(true)
       },
       (error) => {
@@ -317,6 +321,7 @@ export default function DocumentPage({ params }: DocumentPageProps) {
         <Editor
           docId={params.id}
           content={editorContent}
+          revision={contentRevision}
           onSaveStatusChange={setSaveStatus}
         />
       )}

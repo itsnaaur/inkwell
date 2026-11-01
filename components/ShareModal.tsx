@@ -19,7 +19,11 @@ import {
 import { Mail, Share2, Users, X } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { db } from '@/lib/firebase/client'
-import { backfillSharedDocumentAccess, grantSharedDocumentAccess } from '@/lib/sharing'
+import {
+  backfillSharedDocumentAccess,
+  grantSharedDocumentAccess,
+  revokeSharedDocumentAccess,
+} from '@/lib/sharing'
 import Button from '@/components/ui/Button'
 import LoadingState from '@/components/ui/LoadingState'
 
@@ -30,6 +34,7 @@ interface ShareModalProps {
 }
 
 interface ShareRecord {
+  uid: string
   email: string
 }
 
@@ -39,6 +44,7 @@ export default function ShareModal({ open, onClose, documentId }: ShareModalProp
   const [shares, setShares] = useState<ShareRecord[]>([])
   const [loading, setLoading] = useState(false)
   const [loadingShares, setLoadingShares] = useState(false)
+  const [removingUid, setRemovingUid] = useState<string | null>(null)
   const [success, setSuccess] = useState('')
   const [error, setError] = useState('')
 
@@ -54,6 +60,7 @@ export default function ShareModal({ open, onClose, documentId }: ShareModalProp
       )
       setShares(
         sharesSnapshot.docs.map((shareDoc) => ({
+          uid: shareDoc.id,
           email: shareDoc.data().sharedWithEmail as string,
         }))
       )
@@ -147,6 +154,22 @@ export default function ShareModal({ open, onClose, documentId }: ShareModalProp
     }
   }
 
+  const handleRemove = async (share: ShareRecord) => {
+    setRemovingUid(share.uid)
+    setError('')
+    setSuccess('')
+
+    try {
+      await revokeSharedDocumentAccess(documentId, share.uid)
+      setShares((current) => current.filter((item) => item.uid !== share.uid))
+      setSuccess(`Removed access for ${share.email}`)
+    } catch {
+      setError('Could not remove access.')
+    } finally {
+      setRemovingUid(null)
+    }
+  }
+
   if (!open) return null
 
   return (
@@ -214,13 +237,22 @@ export default function ShareModal({ open, onClose, documentId }: ShareModalProp
             <ul className="mt-3 space-y-2">
               {shares.map((share) => (
                 <li
-                  key={share.email}
+                  key={share.uid}
                   className="flex items-center gap-3 rounded-xl bg-slate-50 px-3.5 py-2.5 text-sm text-slate-700"
                 >
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-inkwell-navy-muted text-inkwell-navy">
                     <Mail className="h-3.5 w-3.5" strokeWidth={2} />
                   </span>
-                  {share.email}
+                  <span className="min-w-0 flex-1 truncate">{share.email}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemove(share)}
+                    disabled={removingUid !== null}
+                    aria-label={`Remove access for ${share.email}`}
+                    className="shrink-0 text-xs font-medium text-red-600 hover:underline disabled:opacity-50"
+                  >
+                    {removingUid === share.uid ? 'Removing...' : 'Remove'}
+                  </button>
                 </li>
               ))}
             </ul>

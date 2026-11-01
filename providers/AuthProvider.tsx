@@ -18,7 +18,7 @@ import {
   signOut as firebaseSignOut,
   updateProfile,
 } from 'firebase/auth'
-import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore'
 import { auth, db } from '@/lib/firebase/client'
 
 interface AuthContextValue {
@@ -31,6 +31,25 @@ interface AuthContextValue {
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
+/** Keeps the profile email lowercase and matching the account so share lookups find it. */
+async function syncUserProfile(user: User) {
+  if (!user.email) return
+
+  const email = user.email.toLowerCase()
+  const profileRef = doc(db, 'users', user.uid)
+  const profile = await getDoc(profileRef)
+
+  if (profile.exists() && profile.data().email === email) return
+
+  await setDoc(
+    profileRef,
+    profile.exists()
+      ? { email }
+      : { email, displayName: user.displayName ?? '', createdAt: serverTimestamp() },
+    { merge: true }
+  )
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
@@ -39,6 +58,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, (nextUser) => {
       setUser(nextUser)
       setLoading(false)
+
+      if (nextUser) {
+        syncUserProfile(nextUser).catch(() => {
+          // Best-effort repair — sign-in still succeeds
+        })
+      }
     })
     return unsubscribe
   }, [])
@@ -56,7 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await updateProfile(credential.user, { displayName })
     // Mirror auth profile into Firestore for email-based share lookups.
     await setDoc(doc(db, 'users', credential.user.uid), {
-      email,
+      email: email.trim().toLowerCase(),
       displayName,
       createdAt: serverTimestamp(),
     })

@@ -9,13 +9,15 @@ import {
   deleteField,
   doc,
   getDoc,
+  runTransaction,
   serverTimestamp,
-  setDoc,
-  updateDoc,
 } from 'firebase/firestore'
 import { db } from '@/lib/firebase/client'
 
 const CONTENT_DOC_ID = 'main'
+
+/** Thrown when someone else saved since this editor last loaded the document. */
+export class DocumentConflictError extends Error {}
 
 export function getDocumentContentRef(documentId: string) {
   return doc(db, 'documents', documentId, 'content', CONTENT_DOC_ID)
@@ -24,32 +26,52 @@ export function getDocumentContentRef(documentId: string) {
 export async function loadDocumentContent(
   documentId: string,
   legacyContent?: unknown
-): Promise<unknown> {
+): Promise<{ body: unknown; revision: number }> {
   if (legacyContent !== undefined && legacyContent !== null) {
-    return legacyContent
+    return { body: legacyContent, revision: 0 }
   }
 
   const contentSnapshot = await getDoc(getDocumentContentRef(documentId))
   if (!contentSnapshot.exists()) {
-    return null
+    return { body: null, revision: 0 }
   }
 
-  return contentSnapshot.data().body ?? null
+  const data = contentSnapshot.data()
+  return { body: data.body ?? null, revision: data.revision ?? 0 }
 }
 
-export async function saveDocumentContent(documentId: string, content: unknown) {
-  await setDoc(
-    getDocumentContentRef(documentId),
-    {
-      body: content,
-      updatedAt: serverTimestamp(),
-    },
-    { merge: true }
-  )
+/**
+ * Saves only if the stored revision still matches the one this editor loaded,
+ * so one person's save can't silently replace another's. Returns the new revision.
+ */
+export async function saveDocumentContent(
+  documentId: string,
+  content: unknown,
+  baseRevision: number
+): Promise<number> {
+  const contentRef = getDocumentContentRef(documentId)
+  const nextRevision = baseRevision + 1
 
-  // Strip legacy inline content from parent once migrated to subcollection.
-  await updateDoc(doc(db, 'documents', documentId), {
-    content: deleteField(),
-    updatedAt: serverTimestamp(),
+  await runTransaction(db, async (transaction) => {
+    const current = await transaction.get(contentRef)
+    const currentRevision = current.exists() ? (current.data().revision ?? 0) : 0
+
+    if (currentRevision !== baseRevision) {
+      throw new DocumentConflictError()
+    }
+
+    transaction.set(
+      contentRef,
+      { body: content, revision: nextRevision, updatedAt: serverTimestamp() },
+      { merge: true }
+    )
+
+    // Strip legacy inline content from parent once migrated to subcollection.
+    transaction.update(doc(db, 'documents', documentId), {
+      content: deleteField(),
+      updatedAt: serverTimestamp(),
+    })
   })
+
+  return nextRevision
 }

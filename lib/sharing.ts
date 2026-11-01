@@ -6,7 +6,6 @@
  */
 import {
   collection,
-  deleteDoc,
   doc,
   getDocs,
   serverTimestamp,
@@ -43,7 +42,10 @@ export async function grantSharedDocumentAccess(
 }
 
 export async function revokeSharedDocumentAccess(documentId: string, targetUserId: string) {
-  await deleteDoc(getSharedWithMeRef(targetUserId, documentId))
+  const batch = writeBatch(db)
+  batch.delete(doc(db, 'documents', documentId, 'shares', targetUserId))
+  batch.delete(getSharedWithMeRef(targetUserId, documentId))
+  await batch.commit()
 }
 
 export async function revokeAllSharedDocumentAccess(documentId: string) {
