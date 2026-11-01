@@ -2,7 +2,16 @@
 
 > **Note:** Inkwell was originally built as Ajaia Docs, a timed hiring assessment for Ajaia. It is now an independent personal project and is not affiliated with or endorsed by Ajaia. Files in `docs/` keep the original name.
 
-A high performance, lightweight document editor built with Next.js 14, Firebase, and Tiptap. Engineered with a decoupled document persistence architecture, user targeted sharing indexes, and a 30 day soft delete lifecycle optimized for high velocity product teams.
+A high performance, lightweight document editor built with Next.js 15, Firebase, and Tiptap. Engineered with a decoupled document persistence architecture, user targeted sharing indexes, and a 30 day soft delete lifecycle optimized for high velocity product teams.
+
+---
+
+## 🕓 Project Timeline
+
+| Stage | Date | What it includes |
+|-------|------|------------------|
+| **Original timed build** ([`v1-4-hour-build`](https://github.com/itsnaaur/inkwell/tree/v1-4-hour-build)) | June 21, 2026 | Planned and built in about 4 hours with AI assistance: the app, its security rules, and its documentation |
+| **Later polish** | November 2, 2026 | Inkwell rename, bug fixes from testing, tighter security rules, edit conflict handling, and dependency upgrades, also with AI assistance |
 
 ---
 
@@ -19,7 +28,7 @@ To deliver a production grade system within the strict development window, the c
 
 ## 🛠️ Integrated Technical Stack
 
-* **Framework:** Next.js 14 (App Router) + TypeScript
+* **Framework:** Next.js 15 (App Router) + TypeScript
 * **Editor Base:** Tiptap v3 Headless Core Engine
 * **Database & Security:** Firestore (Client SDK Core Layer)
 * **Session Layer:** Firebase Authentication
