@@ -40,14 +40,13 @@ Source code follows a layered Next.js structure. See **`docs/PROJECT_STRUCTURE.m
 | `lib/` | Business logic, Firebase clients, utilities |
 | `types/` | Shared TypeScript interfaces |
 | `scripts/` | Dev tooling (seed, cache clean) |
-| `docs/` | Architecture, AI workflow, battle plan |
+| `docs/` | Architecture, AI workflow, project structure |
 | `public/` | Static assets (`ajaia-logo.png`) |
 
 Supplementary documentation:
 
 * `docs/ARCHITECTURE.md` — Systems design, Firestore schema, performance strategies
 * `docs/AI_WORKFLOW.md` — AI-assisted development notes
-* `docs/ajaia-battle-plan.md` — Original development roadmap
 * `docs/PROJECT_STRUCTURE.md` — Folder layout and critical code paths
 
 ---

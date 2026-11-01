@@ -66,4 +66,3 @@ ajaia/
 
 - `docs/ARCHITECTURE.md` — system design and tradeoffs
 - `docs/AI_WORKFLOW.md` — AI-assisted development notes
-- `docs/ajaia-battle-plan.md` — original project roadmap

@@ -24,7 +24,7 @@ This application was built utilizing an AI-native workflow, but critical enginee
 ### Resolving Firestore Security Errors (Sharing Index Overhaul)
 
 * **AI Recommendation:** The AI initially recommended using a Firestore `collectionGroup` query on a nested `/shares` subcollection to aggregate files shared with a recipient.
-* **Human Engineering Judgment:** During continuous integration testing, I caught repeated database permission exceptions caused by this pattern. Instead of fighting the collection group index constraints, I completely refactored the data model to create a dedicated user lookup collection (`/users/{uid}/sharedWithMe/{documentId}`). This approach simplified database security rules, eliminated cross-owner data leakage, and provided a clean surface for instant sidebar hydration.
+* **Human Engineering Judgment:** During manual testing, I caught repeated database permission exceptions caused by this pattern. Instead of fighting the collection group index constraints, I completely refactored the data model to create a dedicated user lookup collection (`/users/{uid}/sharedWithMe/{documentId}`). This approach simplified database security rules, eliminated cross-owner data leakage, and provided a clean surface for instant sidebar hydration.
 
 ---
 
