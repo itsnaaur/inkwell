@@ -62,14 +62,21 @@ export default function Editor({ docId, content, onSaveStatusChange }: EditorPro
   const onSaveStatusChangeRef = useRef(onSaveStatusChange)
   onSaveStatusChangeRef.current = onSaveStatusChange
 
+  // Bumped on every edit so a finishing save can't report "saved" over newer changes.
+  const editVersionRef = useRef(0)
+  const hasUnsavedChangesRef = useRef(false)
+
   const saveContent = useMemo(
     () =>
       debounce(async (json: unknown) => {
-        onSaveStatusChangeRef.current('saving')
+        const savingVersion = editVersionRef.current
         try {
           await saveDocumentContent(docId, json)
+          if (savingVersion !== editVersionRef.current) return
+          hasUnsavedChangesRef.current = false
           onSaveStatusChangeRef.current('saved')
         } catch {
+          if (savingVersion !== editVersionRef.current) return
           onSaveStatusChangeRef.current('idle')
         }
       }, 1500),
@@ -81,12 +88,39 @@ export default function Editor({ docId, content, onSaveStatusChange }: EditorPro
       extensions: [StarterKit, Underline],
       content: content ?? '',
       immediatelyRender: false,
+      // Keeps toolbar active states in sync with the cursor position.
+      shouldRerenderOnTransaction: true,
       onUpdate: ({ editor: currentEditor }) => {
+        editVersionRef.current += 1
+        hasUnsavedChangesRef.current = true
+        onSaveStatusChangeRef.current('saving')
         saveContent(currentEditor.getJSON())
       },
     },
     [docId]
   )
+
+  // Save pending edits on in-app navigation and when the tab is hidden; warn before a reload or close.
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') saveContent.flush()
+    }
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!hasUnsavedChangesRef.current) return
+      saveContent.flush()
+      event.preventDefault()
+      event.returnValue = ''
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+      saveContent.flush()
+    }
+  }, [saveContent])
 
   const hydratedForDoc = useRef<string | null>(null)
 

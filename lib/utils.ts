@@ -1,12 +1,25 @@
 export function debounce<T extends (...args: never[]) => void>(
   fn: T,
   delay: number
-): (...args: Parameters<T>) => void {
+): ((...args: Parameters<T>) => void) & { flush: () => void } {
   let timeout: ReturnType<typeof setTimeout>
-  return (...args: Parameters<T>) => {
+  let pendingArgs: Parameters<T> | null = null
+
+  const flush = () => {
     clearTimeout(timeout)
-    timeout = setTimeout(() => fn(...args), delay)
+    if (!pendingArgs) return
+    const args = pendingArgs
+    pendingArgs = null
+    fn(...args)
   }
+
+  const debounced = (...args: Parameters<T>) => {
+    pendingArgs = args
+    clearTimeout(timeout)
+    timeout = setTimeout(flush, delay)
+  }
+
+  return Object.assign(debounced, { flush })
 }
 
 export function parseMdToTiptap(text: string) {
