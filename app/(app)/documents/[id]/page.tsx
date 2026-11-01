@@ -15,6 +15,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { db } from '@/lib/firebase/client'
 import { getDocumentContentRef, loadDocumentContent } from '@/lib/documentContent'
 import { syncShareMetadata } from '@/lib/shareMetadata'
+import { getSharedWithMeRef } from '@/lib/sharing'
 import { isActiveDocument, moveDocumentToTrash } from '@/lib/trash'
 import { formatTimestamp } from '@/lib/utils'
 
@@ -46,6 +47,7 @@ export default function DocumentPage({ params }: DocumentPageProps) {
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [error, setError] = useState('')
+  const [loadError, setLoadError] = useState('')
   const accessCheckedRef = useRef(false)
 
   const checkAccess = useCallback(
@@ -68,44 +70,56 @@ export default function DocumentPage({ params }: DocumentPageProps) {
     setContentReady(false)
     setEditorContent(null)
     setLoading(true)
+    setLoadError('')
 
-    const unsubscribe = onSnapshot(doc(db, 'documents', params.id), async (snapshot) => {
-      if (!snapshot.exists()) {
-        router.push('/documents')
-        return
-      }
-
-      const data = snapshot.data() as DocumentData
-
-      if (!isActiveDocument(data)) {
-        router.push(data.ownerId === user.uid ? '/documents/trash' : '/documents')
-        return
-      }
-
-      if (!accessCheckedRef.current) {
-        let allowed = data.ownerId === user.uid
-
-        if (!allowed) {
-          allowed = await checkAccess(data)
-        }
-
-        if (!allowed) {
+    const unsubscribe = onSnapshot(
+      doc(db, 'documents', params.id),
+      async (snapshot) => {
+        if (!snapshot.exists()) {
           router.push('/documents')
           return
         }
 
-        accessCheckedRef.current = true
-        setHasAccess(true)
+        const data = snapshot.data() as DocumentData
 
-        const loadedContent = await loadDocumentContent(params.id, data.content)
-        setEditorContent(loadedContent)
-        setContentReady(true)
+        if (!isActiveDocument(data)) {
+          router.push(data.ownerId === user.uid ? '/documents/trash' : '/documents')
+          return
+        }
+
+        if (!accessCheckedRef.current) {
+          let allowed = data.ownerId === user.uid
+
+          if (!allowed) {
+            allowed = await checkAccess(data)
+          }
+
+          if (!allowed) {
+            router.push('/documents')
+            return
+          }
+
+          accessCheckedRef.current = true
+          setHasAccess(true)
+
+          const loadedContent = await loadDocumentContent(params.id, data.content)
+          setEditorContent(loadedContent)
+          setContentReady(true)
+        }
+
+        setDocumentData(data)
+        setTitle(data.title)
+        setLoading(false)
+      },
+      (snapshotError) => {
+        console.error('Failed to load document:', snapshotError)
+        setLoadError(
+          snapshotError.code === 'permission-denied'
+            ? 'You do not have access to this document. It may have been moved to trash or is no longer shared with you.'
+            : 'Could not load this document. Check your connection and try again.'
+        )
       }
-
-      setDocumentData(data)
-      setTitle(data.title)
-      setLoading(false)
-    })
+    )
 
     return unsubscribe
   }, [checkAccess, params.id, router, user])
@@ -150,6 +164,13 @@ export default function DocumentPage({ params }: DocumentPageProps) {
         }).catch(() => {
           // Share metadata sync is best-effort
         })
+      } else if (user) {
+        updateDoc(getSharedWithMeRef(user.uid, params.id), {
+          title: trimmedTitle,
+          updatedAt,
+        }).catch(() => {
+          // Recipient index refresh is best-effort
+        })
       }
     } catch {
       setError('Could not update title.')
@@ -171,6 +192,21 @@ export default function DocumentPage({ params }: DocumentPageProps) {
 
   if (!user) {
     return null
+  }
+
+  if (loadError) {
+    return (
+      <PageContainer variant="editor">
+        <Link
+          href="/documents"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-inkwell-navy hover:underline"
+        >
+          <ArrowLeft className="h-4 w-4" strokeWidth={2} />
+          Back to documents
+        </Link>
+        <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{loadError}</p>
+      </PageContainer>
+    )
   }
 
   if (loading || !documentData || !contentReady || !hasAccess) {

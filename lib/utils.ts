@@ -22,35 +22,78 @@ export function debounce<T extends (...args: never[]) => void>(
   return Object.assign(debounced, { flush })
 }
 
+interface TiptapNode {
+  type: string
+  attrs?: Record<string, unknown>
+  content?: TiptapNode[]
+  marks?: { type: string }[]
+  text?: string
+}
+
+function parseInlineMarkdown(text: string): TiptapNode[] {
+  const pattern = /\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(\S(?:.*?\S)?)\*/g
+  const nodes: TiptapNode[] = []
+  let lastIndex = 0
+
+  for (const match of Array.from(text.matchAll(pattern))) {
+    if (match.index > lastIndex) {
+      nodes.push({ type: 'text', text: text.slice(lastIndex, match.index) })
+    }
+    if (match[1]) {
+      nodes.push({ type: 'text', text: match[1], marks: [{ type: 'bold' }, { type: 'italic' }] })
+    } else if (match[2]) {
+      nodes.push({ type: 'text', text: match[2], marks: [{ type: 'bold' }] })
+    } else {
+      nodes.push({ type: 'text', text: match[3], marks: [{ type: 'italic' }] })
+    }
+    lastIndex = match.index + match[0].length
+  }
+
+  if (lastIndex < text.length) {
+    nodes.push({ type: 'text', text: text.slice(lastIndex) })
+  }
+  return nodes
+}
+
 export function parseMdToTiptap(text: string) {
-  const lines = text.split('\n')
-  const content = lines.map((line) => {
-    if (line.startsWith('### ')) {
-      return {
+  const content: TiptapNode[] = []
+
+  // Consecutive list lines share one list node; nesting is flattened.
+  const addListItem = (listType: string, itemText: string, attrs?: Record<string, unknown>) => {
+    const item: TiptapNode = {
+      type: 'listItem',
+      content: [{ type: 'paragraph', content: parseInlineMarkdown(itemText) }],
+    }
+    const previous = content[content.length - 1]
+    if (previous?.type === listType) {
+      previous.content?.push(item)
+    } else {
+      content.push({ type: listType, ...(attrs && { attrs }), content: [item] })
+    }
+  }
+
+  for (const line of text.split(/\r?\n/)) {
+    const heading = line.match(/^(#{1,3}) (.*)$/)
+    const bullet = line.match(/^\s*[-*+]\s+(.*)$/)
+    const ordered = line.match(/^\s*(\d+)[.)]\s+(.*)$/)
+
+    if (heading) {
+      content.push({
         type: 'heading',
-        attrs: { level: 3 },
-        content: [{ type: 'text', text: line.slice(4) }],
-      }
+        attrs: { level: heading[1].length },
+        content: parseInlineMarkdown(heading[2]),
+      })
+    } else if (bullet) {
+      addListItem('bulletList', bullet[1])
+    } else if (ordered) {
+      addListItem('orderedList', ordered[2], { start: Number(ordered[1]) })
+    } else if (line.trim() === '') {
+      content.push({ type: 'paragraph', content: [] })
+    } else {
+      content.push({ type: 'paragraph', content: parseInlineMarkdown(line) })
     }
-    if (line.startsWith('## ')) {
-      return {
-        type: 'heading',
-        attrs: { level: 2 },
-        content: [{ type: 'text', text: line.slice(3) }],
-      }
-    }
-    if (line.startsWith('# ')) {
-      return {
-        type: 'heading',
-        attrs: { level: 1 },
-        content: [{ type: 'text', text: line.slice(2) }],
-      }
-    }
-    if (line.trim() === '') {
-      return { type: 'paragraph', content: [] }
-    }
-    return { type: 'paragraph', content: [{ type: 'text', text: line }] }
-  })
+  }
+
   return { type: 'doc', content }
 }
 

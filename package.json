@@ -12,7 +12,6 @@
     "seed": "node scripts/seed-users.mjs"
   },
   "dependencies": {
-    "@tiptap/extension-underline": "^3.27.1",
     "@tiptap/pm": "^3.27.1",
     "@tiptap/react": "^3.27.1",
     "@tiptap/starter-kit": "^3.27.1",

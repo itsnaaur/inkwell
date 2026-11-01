@@ -50,4 +50,54 @@ describe('parseMdToTiptap', () => {
     const result = parseMdToTiptap('Line one\n\nLine two')
     expect(result.content[1].content).toEqual([])
   })
+
+  it('converts bold and italic text to marks', () => {
+    const result = parseMdToTiptap('Some **bold** and *italic* text')
+    expect(result.content[0].content).toEqual([
+      { type: 'text', text: 'Some ' },
+      { type: 'text', text: 'bold', marks: [{ type: 'bold' }] },
+      { type: 'text', text: ' and ' },
+      { type: 'text', text: 'italic', marks: [{ type: 'italic' }] },
+      { type: 'text', text: ' text' },
+    ])
+  })
+
+  it('leaves literal asterisks alone', () => {
+    const result = parseMdToTiptap('2 * 3 * 4')
+    expect(result.content[0].content).toEqual([{ type: 'text', text: '2 * 3 * 4' }])
+  })
+
+  it('groups consecutive bullets into one list', () => {
+    const result = parseMdToTiptap('- One\n- **Two**')
+    expect(result.content).toHaveLength(1)
+    expect(result.content[0].type).toBe('bulletList')
+    expect(result.content[0].content).toEqual([
+      {
+        type: 'listItem',
+        content: [{ type: 'paragraph', content: [{ type: 'text', text: 'One' }] }],
+      },
+      {
+        type: 'listItem',
+        content: [
+          {
+            type: 'paragraph',
+            content: [{ type: 'text', text: 'Two', marks: [{ type: 'bold' }] }],
+          },
+        ],
+      },
+    ])
+  })
+
+  it('converts numbered lines and keeps the starting number', () => {
+    const result = parseMdToTiptap('3. Three\n4. Four')
+    expect(result.content[0].type).toBe('orderedList')
+    expect(result.content[0].attrs).toEqual({ start: 3 })
+    expect(result.content[0].content).toHaveLength(2)
+  })
+
+  it('handles Windows line endings', () => {
+    const result = parseMdToTiptap('# Title\r\n- Item\r\n')
+    expect(result.content[0].content).toEqual([{ type: 'text', text: 'Title' }])
+    expect(result.content[1].type).toBe('bulletList')
+  })
 })

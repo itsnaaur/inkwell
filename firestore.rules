@@ -16,6 +16,10 @@ service cloud.firestore {
       match /sharedWithMe/{documentId} {
         allow read: if request.auth.uid == uid;
         allow create, update, delete: if request.auth.uid == get(/databases/$(database)/documents/documents/$(documentId)).data.ownerId;
+
+        // Recipients can refresh only the display fields on their own entry (collaborator rename)
+        allow update: if request.auth.uid == uid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'updatedAt']);
       }
     }
 
@@ -44,6 +48,11 @@ service cloud.firestore {
 
       // Owner updates on trashed documents (restore)
       allow update: if isOwner() && resource.data.isDeleted == true;
+
+      // Shared users can rename and save active documents, but not change owner or trash state.
+      // 'content' covers removing the legacy inline field during saves.
+      allow update: if isActiveDoc() && isSharedWithUser()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title', 'updatedAt', 'content']);
 
       allow delete: if isOwner() && resource.data.isDeleted == true;
 

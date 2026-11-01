@@ -7,7 +7,6 @@
  * Save debounce is 1500ms to limit Firestore write volume during typing.
  */
 import { useEffect, useMemo, useRef } from 'react'
-import Underline from '@tiptap/extension-underline'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import {
@@ -85,7 +84,7 @@ export default function Editor({ docId, content, onSaveStatusChange }: EditorPro
 
   const editor = useEditor(
     {
-      extensions: [StarterKit, Underline],
+      extensions: [StarterKit],
       content: content ?? '',
       immediatelyRender: false,
       // Keeps toolbar active states in sync with the cursor position.
