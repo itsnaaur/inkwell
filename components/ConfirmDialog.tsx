@@ -24,8 +24,8 @@ export default function ConfirmDialog({
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/25 px-4 backdrop-blur-sm">
-      <div className="card w-full max-w-md p-6 shadow-card-hover">
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/25 p-4 backdrop-blur-sm">
+      <div className="card my-auto w-full max-w-md p-6 shadow-card-hover">
         <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
         <p className="mt-2 text-sm leading-relaxed text-slate-500">{description}</p>
 

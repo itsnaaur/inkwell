@@ -203,7 +203,7 @@ export default function DocumentPage(props: DocumentPageProps) {
       <PageContainer variant="editor">
         <Link
           href="/documents"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-inkwell-navy hover:underline"
+          className="-my-2 inline-flex items-center gap-1.5 py-2 text-sm font-medium text-inkwell-navy hover:underline"
         >
           <ArrowLeft className="h-4 w-4" strokeWidth={2} />
           Back to documents
@@ -225,7 +225,7 @@ export default function DocumentPage(props: DocumentPageProps) {
         <div className="min-w-0 flex-1">
           <Link
             href="/documents"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-inkwell-navy hover:underline"
+            className="-my-2 inline-flex items-center gap-1.5 py-2 text-sm font-medium text-inkwell-navy hover:underline"
           >
             <ArrowLeft className="h-4 w-4" strokeWidth={2} />
             Back to documents
@@ -249,10 +249,10 @@ export default function DocumentPage(props: DocumentPageProps) {
               <button
                 type="button"
                 onClick={() => setEditingTitle(true)}
-                className="flex items-center gap-2 text-left"
+                className="flex min-w-0 items-center gap-2 text-left"
               >
-                <h1 className="text-3xl font-semibold tracking-tight text-slate-900">{title}</h1>
-                <span className="inline-flex items-center gap-1 rounded-lg bg-slate-100 px-2 py-1 text-xs text-slate-500 opacity-0 transition group-hover:opacity-100">
+                <h1 className="min-w-0 break-words text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">{title}</h1>
+                <span className="inline-flex items-center gap-1 rounded-lg bg-slate-100 px-2 py-1 shrink-0 text-xs text-slate-500 opacity-0 transition group-hover:opacity-100 [@media(hover:none)]:opacity-100">
                   <Pencil className="h-3 w-3" strokeWidth={2} />
                   Rename
                 </span>

@@ -63,7 +63,7 @@ function OwnedDocumentRow({
       >
         <FileText className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={2} />
         <span className="min-w-0 pr-1">
-          <span className="block truncate font-medium">{document.title}</span>
+          <span className="block truncate text-sm font-medium">{document.title}</span>
           <span className="mt-0.5 block truncate text-xs text-slate-400">
             {formatTimestamp(document.updatedAt) || 'Recently updated'}
           </span>
@@ -78,8 +78,8 @@ function OwnedDocumentRow({
           event.stopPropagation()
           onToggleMenu()
         }}
-        className={`mr-2 mt-2 shrink-0 rounded-md p-1 text-slate-400 transition hover:bg-white hover:text-slate-700 ${
-          menuOpen ? 'bg-white text-slate-700 opacity-100' : 'opacity-100 lg:opacity-0 lg:group-hover:opacity-100'
+        className={`mr-1 mt-1 shrink-0 rounded-md p-2 text-slate-400 transition hover:bg-white hover:text-slate-700 ${
+          menuOpen ? 'bg-white text-slate-700 opacity-100' : 'opacity-100 lg:opacity-0 lg:group-hover:opacity-100 lg:[@media(hover:none)]:opacity-100'
         }`}
       >
         <MoreHorizontal className="h-4 w-4" strokeWidth={2} />
@@ -149,7 +149,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex h-screen w-72 shrink-0 flex-col border-r border-slate-200/80 bg-white shadow-card transition-transform lg:static lg:z-auto ${
+        className={`fixed inset-y-0 left-0 z-40 flex h-dvh w-72 shrink-0 flex-col border-r border-slate-200/80 bg-white shadow-card transition-transform lg:static lg:z-auto ${
           open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
@@ -275,7 +275,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
                   >
                     <FileText className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={2} />
                     <span className="min-w-0">
-                      <span className="block truncate font-medium">{document.title}</span>
+                      <span className="block truncate text-sm font-medium">{document.title}</span>
                       <span className="mt-1 inline-block rounded-full bg-inkwell-navy-muted px-2 py-0.5 text-[11px] font-medium text-inkwell-navy">
                         {document.ownerEmail}
                       </span>

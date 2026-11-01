@@ -51,7 +51,7 @@ function ToolbarButton({
       aria-label={label}
       title={label}
       onClick={onClick}
-      className={`inline-flex h-8 w-8 items-center justify-center rounded-lg transition ${
+      className={`inline-flex h-10 w-9 items-center justify-center rounded-lg transition sm:w-10 ${
         active
           ? 'bg-inkwell-navy text-white shadow-sm'
           : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
@@ -211,7 +211,7 @@ export default function Editor({ docId, content, revision, onSaveStatusChange }:
   }
 
   return (
-    <div className="card overflow-hidden">
+    <div className="card overflow-clip">
       {saveProblem === 'conflict' && (
         <div role="alert" className="border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
           <p>Someone else changed this document. Your latest edits have not been saved.</p>
@@ -243,7 +243,7 @@ export default function Editor({ docId, content, revision, onSaveStatusChange }:
           </button>
         </div>
       )}
-      <div className="flex flex-wrap items-center gap-1 border-b border-slate-100 bg-slate-50/80 p-2.5">
+      <div className="sticky top-0 z-10 flex flex-wrap items-center gap-0.5 border-b border-slate-100 bg-slate-50 p-2 sm:gap-1 sm:p-2.5">
         <ToolbarButton
           active={editor.isActive('bold')}
           label="Bold"
@@ -265,7 +265,7 @@ export default function Editor({ docId, content, revision, onSaveStatusChange }:
         >
           <UnderlineIcon className="h-4 w-4" strokeWidth={2} />
         </ToolbarButton>
-        <span className="mx-1 h-6 w-px bg-slate-200" />
+        <span className="mx-1 hidden h-6 w-px bg-slate-200 sm:block" />
         <ToolbarButton
           active={editor.isActive('heading', { level: 1 })}
           label="Heading 1"
@@ -287,7 +287,7 @@ export default function Editor({ docId, content, revision, onSaveStatusChange }:
         >
           <Heading3 className="h-4 w-4" strokeWidth={2} />
         </ToolbarButton>
-        <span className="mx-1 h-6 w-px bg-slate-200" />
+        <span className="mx-1 hidden h-6 w-px bg-slate-200 sm:block" />
         <ToolbarButton
           active={editor.isActive('bulletList')}
           label="Bullet list"
@@ -305,7 +305,7 @@ export default function Editor({ docId, content, revision, onSaveStatusChange }:
       </div>
       <EditorContent
         editor={editor}
-        className="max-w-none px-6 py-6 text-slate-900 focus:outline-none [&_.ProseMirror]:min-h-[560px] [&_.ProseMirror]:text-slate-900 [&_.ProseMirror]:outline-none"
+        className="max-w-none px-4 py-5 text-slate-900 sm:px-6 sm:py-6 focus:outline-none [&_.ProseMirror]:min-h-[560px] [&_.ProseMirror]:text-slate-900 [&_.ProseMirror]:outline-none"
       />
     </div>
   )

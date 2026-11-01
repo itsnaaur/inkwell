@@ -71,7 +71,7 @@ textarea::placeholder {
 
 @layer components {
   .input-field {
-    @apply mt-1.5 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400;
+    @apply mt-1.5 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-base lg:text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400;
   }
 
   .input-field:focus {

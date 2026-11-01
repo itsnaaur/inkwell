@@ -18,7 +18,7 @@ const layoutClass: Record<LoadingLayout, string> = {
   inline: 'flex items-center gap-2 text-slate-500',
   section: 'flex items-center gap-3 text-slate-500',
   page: 'flex min-h-[60vh] flex-1 items-center justify-center text-slate-600',
-  fullscreen: 'flex h-screen items-center justify-center bg-[#f4f6fb] text-slate-600',
+  fullscreen: 'flex h-dvh items-center justify-center bg-[#f4f6fb] text-slate-600',
   overlay:
     'fixed inset-0 z-50 flex items-center justify-center bg-[#f4f6fb]/90 text-slate-600 backdrop-blur-[1px]',
 }

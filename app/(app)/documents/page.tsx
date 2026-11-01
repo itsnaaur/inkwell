@@ -73,7 +73,7 @@ export default function DocumentsPage() {
             Create, edit, upload, and share your documents from one place.
           </p>
         </div>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex shrink-0 flex-wrap gap-3">
           <Button variant="secondary" icon={Upload} onClick={() => setUploadOpen(true)}>
             Upload file
           </Button>
@@ -120,7 +120,7 @@ export default function DocumentsPage() {
             </Button>
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {owned.map((document) => (
               <Link
                 key={document.id}
@@ -165,14 +165,14 @@ export default function DocumentsPage() {
             </p>
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {shared.map((document) => (
               <Link
                 key={document.id}
                 href={`/documents/${document.id}`}
                 className="card group p-5 transition hover:-translate-y-0.5 hover:border-inkwell-navy/20 hover:shadow-card-hover"
               >
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-inkwell-navy-muted px-2.5 py-1 text-xs font-medium text-inkwell-navy">
+                <span className="inline-flex max-w-full items-center gap-1.5 break-all rounded-full bg-inkwell-navy-muted px-2.5 py-1 text-xs font-medium text-inkwell-navy">
                   <Users className="h-3 w-3" strokeWidth={2} />
                   Shared by {document.ownerEmail}
                 </span>

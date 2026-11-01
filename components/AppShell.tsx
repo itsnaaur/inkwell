@@ -28,7 +28,7 @@ export default function AppShell({
 
   if (ownedError) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center gap-4 bg-[#f4f6fb] px-6 text-center">
+      <div className="flex h-dvh flex-col items-center justify-center gap-4 bg-[#f4f6fb] px-6 text-center">
         <p className="max-w-md text-sm text-red-700">{ownedError}</p>
         <button
           type="button"
@@ -42,7 +42,7 @@ export default function AppShell({
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#f4f6fb]">
+    <div className="flex h-dvh overflow-hidden bg-[#f4f6fb]">
       <Sidebar open={sidebarOpen} onClose={onCloseSidebar} />
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
         <header className="flex shrink-0 items-center justify-between border-b border-slate-200/80 bg-white px-4 py-3 shadow-sm lg:hidden">

@@ -15,7 +15,7 @@ const features = [
 
 export default function AuthShell({ title, subtitle, children, footer }: AuthShellProps) {
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-dvh overflow-hidden">
       <div className="relative hidden w-[44%] shrink-0 overflow-hidden bg-inkwell-navy lg:flex lg:flex-col">
         <div
           className="absolute inset-0 opacity-[0.14]"

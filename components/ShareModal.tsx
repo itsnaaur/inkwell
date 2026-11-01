@@ -173,8 +173,8 @@ export default function ShareModal({ open, onClose, documentId }: ShareModalProp
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/25 px-4 backdrop-blur-sm">
-      <div className="card w-full max-w-md p-6 shadow-card-hover">
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/25 p-4 backdrop-blur-sm">
+      <div className="card my-auto w-full max-w-md p-6 shadow-card-hover">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-inkwell-navy-muted text-inkwell-navy">
@@ -188,7 +188,7 @@ export default function ShareModal({ open, onClose, documentId }: ShareModalProp
           <button
             onClick={onClose}
             aria-label="Close"
-            className="btn-ghost !px-2 !py-2"
+            className="btn-ghost !p-3"
           >
             <X className="h-4 w-4" strokeWidth={2} />
           </button>
