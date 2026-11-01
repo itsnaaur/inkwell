@@ -1,4 +1,4 @@
-// Ajaia Docs — Firestore security rules
+// Inkwell — Firestore security rules
 // Publish manually in Firebase Console → Firestore → Rules
 //
 // Key design choices:

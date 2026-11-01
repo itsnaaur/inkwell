@@ -31,7 +31,7 @@ interface SidebarProps {
 function UserAvatar({ email }: { email: string }) {
   const initial = email.charAt(0).toUpperCase()
   return (
-    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ajaia-navy text-sm font-semibold text-white">
+    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-inkwell-navy text-sm font-semibold text-white">
       {initial}
     </div>
   )
@@ -276,7 +276,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
                     <FileText className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={2} />
                     <span className="min-w-0">
                       <span className="block truncate font-medium">{document.title}</span>
-                      <span className="mt-1 inline-block rounded-full bg-ajaia-navy-muted px-2 py-0.5 text-[11px] font-medium text-ajaia-navy">
+                      <span className="mt-1 inline-block rounded-full bg-inkwell-navy-muted px-2 py-0.5 text-[11px] font-medium text-inkwell-navy">
                         {document.ownerEmail}
                       </span>
                     </span>

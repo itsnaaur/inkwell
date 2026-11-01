@@ -49,7 +49,7 @@ function ToolbarButton({
       onClick={onClick}
       className={`inline-flex h-8 w-8 items-center justify-center rounded-lg transition ${
         active
-          ? 'bg-ajaia-navy text-white shadow-sm'
+          ? 'bg-inkwell-navy text-white shadow-sm'
           : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
       }`}
     >

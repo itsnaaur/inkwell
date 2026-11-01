@@ -5,10 +5,10 @@
 :root {
   --background: #f4f6fb;
   --foreground: #0f172a;
-  --ajaia-navy: #001a72;
-  --ajaia-navy-light: #002d9c;
-  --ajaia-navy-dark: #001454;
-  --ajaia-navy-muted: #e8edf8;
+  --inkwell-navy: #001a72;
+  --inkwell-navy-light: #002d9c;
+  --inkwell-navy-dark: #001454;
+  --inkwell-navy-muted: #e8edf8;
 }
 
 body {
@@ -75,17 +75,17 @@ textarea::placeholder {
   }
 
   .input-field:focus {
-    border-color: var(--ajaia-navy);
+    border-color: var(--inkwell-navy);
     box-shadow: 0 0 0 2px rgb(0 26 114 / 0.1);
   }
 
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-white shadow-sm transition disabled:cursor-not-allowed disabled:opacity-60;
-    background-color: var(--ajaia-navy);
+    background-color: var(--inkwell-navy);
   }
 
   .btn-primary:hover:not(:disabled) {
-    background-color: var(--ajaia-navy-light);
+    background-color: var(--inkwell-navy-light);
   }
 
   .btn-secondary {
@@ -111,8 +111,8 @@ textarea::placeholder {
 
   .nav-item-active {
     @apply font-medium;
-    background-color: var(--ajaia-navy-muted);
-    color: var(--ajaia-navy);
+    background-color: var(--inkwell-navy-muted);
+    color: var(--inkwell-navy);
   }
 
   .nav-item-inactive {
@@ -121,7 +121,7 @@ textarea::placeholder {
 
   .spinner {
     @apply animate-spin rounded-full border-2 border-slate-200;
-    border-top-color: var(--ajaia-navy);
+    border-top-color: var(--inkwell-navy);
   }
 
   .sidebar-scroll {

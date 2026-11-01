@@ -81,7 +81,7 @@ export default function UploadModal({ open, onClose }: UploadModalProps) {
       <div className="card w-full max-w-md p-6 shadow-card-hover">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ajaia-navy-muted text-ajaia-navy">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-inkwell-navy-muted text-inkwell-navy">
               <Upload className="h-5 w-5" strokeWidth={2} />
             </div>
             <div>
@@ -94,8 +94,8 @@ export default function UploadModal({ open, onClose }: UploadModalProps) {
           </button>
         </div>
 
-        <label className="mt-6 flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/80 px-6 py-12 text-center transition hover:border-ajaia-navy/30 hover:bg-ajaia-navy-muted/30">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-ajaia-navy shadow-sm">
+        <label className="mt-6 flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/80 px-6 py-12 text-center transition hover:border-inkwell-navy/30 hover:bg-inkwell-navy-muted/30">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-inkwell-navy shadow-sm">
             <Upload className="h-6 w-6" strokeWidth={1.75} />
           </div>
           <span className="mt-4 text-sm font-medium text-slate-700">

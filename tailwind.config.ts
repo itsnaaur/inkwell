@@ -11,11 +11,11 @@ const config: Config = {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
-        ajaia: {
-          navy: 'var(--ajaia-navy)',
-          'navy-light': 'var(--ajaia-navy-light)',
-          'navy-dark': 'var(--ajaia-navy-dark)',
-          'navy-muted': 'var(--ajaia-navy-muted)',
+        inkwell: {
+          navy: 'var(--inkwell-navy)',
+          'navy-light': 'var(--inkwell-navy-light)',
+          'navy-dark': 'var(--inkwell-navy-dark)',
+          'navy-muted': 'var(--inkwell-navy-muted)',
         },
       },
       fontFamily: {

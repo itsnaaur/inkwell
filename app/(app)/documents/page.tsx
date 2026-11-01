@@ -67,7 +67,7 @@ export default function DocumentsPage() {
       <PageContainer>
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-medium text-ajaia-navy">Workspace</p>
+          <p className="text-sm font-medium text-inkwell-navy">Workspace</p>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight text-slate-900">Documents</h1>
           <p className="mt-2 max-w-lg text-sm leading-relaxed text-slate-500">
             Create, edit, upload, and share your documents from one place.
@@ -95,7 +95,7 @@ export default function DocumentsPage() {
       <section className="mt-8">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="flex items-center gap-2 text-lg font-semibold text-slate-900">
-            <FolderOpen className="h-5 w-5 text-ajaia-navy" strokeWidth={2} />
+            <FolderOpen className="h-5 w-5 text-inkwell-navy" strokeWidth={2} />
             My Documents
           </h2>
           <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
@@ -104,7 +104,7 @@ export default function DocumentsPage() {
         </div>
         {owned.length === 0 ? (
           <div className="card flex flex-col items-center px-6 py-14 text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-ajaia-navy-muted text-ajaia-navy">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-inkwell-navy-muted text-inkwell-navy">
               <FileText className="h-6 w-6" strokeWidth={1.75} />
             </div>
             <p className="mt-4 font-medium text-slate-900">No documents yet</p>
@@ -125,9 +125,9 @@ export default function DocumentsPage() {
               <Link
                 key={document.id}
                 href={`/documents/${document.id}`}
-                className="card group p-5 transition hover:-translate-y-0.5 hover:border-ajaia-navy/20 hover:shadow-card-hover"
+                className="card group p-5 transition hover:-translate-y-0.5 hover:border-inkwell-navy/20 hover:shadow-card-hover"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-ajaia-navy-muted text-ajaia-navy transition group-hover:bg-ajaia-navy group-hover:text-white">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-inkwell-navy-muted text-inkwell-navy transition group-hover:bg-inkwell-navy group-hover:text-white">
                   <FileText className="h-5 w-5" strokeWidth={1.75} />
                 </div>
                 <h3 className="mt-4 font-semibold text-slate-900">{document.title}</h3>
@@ -144,7 +144,7 @@ export default function DocumentsPage() {
       <section className="mt-8">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="flex items-center gap-2 text-lg font-semibold text-slate-900">
-            <Users className="h-5 w-5 text-ajaia-navy" strokeWidth={2} />
+            <Users className="h-5 w-5 text-inkwell-navy" strokeWidth={2} />
             Shared with Me
           </h2>
           {!sharedLoading && (
@@ -170,9 +170,9 @@ export default function DocumentsPage() {
               <Link
                 key={document.id}
                 href={`/documents/${document.id}`}
-                className="card group p-5 transition hover:-translate-y-0.5 hover:border-ajaia-navy/20 hover:shadow-card-hover"
+                className="card group p-5 transition hover:-translate-y-0.5 hover:border-inkwell-navy/20 hover:shadow-card-hover"
               >
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-ajaia-navy-muted px-2.5 py-1 text-xs font-medium text-ajaia-navy">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-inkwell-navy-muted px-2.5 py-1 text-xs font-medium text-inkwell-navy">
                   <Users className="h-3 w-3" strokeWidth={2} />
                   Shared by {document.ownerEmail}
                 </span>

@@ -61,7 +61,7 @@ export default function TrashPage() {
   return (
     <PageContainer>
       <div>
-        <p className="text-sm font-medium text-ajaia-navy">Workspace</p>
+        <p className="text-sm font-medium text-inkwell-navy">Workspace</p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight text-slate-900">Trash</h1>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-500">
           Deleted documents stay here for {TRASH_RETENTION_DAYS} days before they are permanently

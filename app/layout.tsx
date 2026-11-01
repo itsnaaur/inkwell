@@ -9,7 +9,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Ajaia Docs',
+  title: 'Inkwell',
   description: 'Create, edit, upload, and share rich-text documents.',
 }
 

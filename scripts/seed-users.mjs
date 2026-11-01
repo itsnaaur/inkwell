@@ -47,12 +47,12 @@ const db = getFirestore(app)
 
 const TEST_USERS = [
   {
-    email: 'alice@ajaia.dev',
+    email: 'alice@inkwell.test',
     password: 'Test1234!',
     displayName: 'Alice',
   },
   {
-    email: 'bob@ajaia.dev',
+    email: 'bob@inkwell.test',
     password: 'Test1234!',
     displayName: 'Bob',
   },
@@ -121,8 +121,8 @@ async function main() {
   }
 
   console.log('Done. Login credentials:')
-  console.log('  alice@ajaia.dev / Test1234!')
-  console.log('  bob@ajaia.dev / Test1234!')
+  console.log('  alice@inkwell.test / Test1234!')
+  console.log('  bob@inkwell.test / Test1234!')
 }
 
 main().catch((error) => {

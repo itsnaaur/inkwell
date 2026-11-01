@@ -16,7 +16,7 @@ const features = [
 export default function AuthShell({ title, subtitle, children, footer }: AuthShellProps) {
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="relative hidden w-[44%] shrink-0 overflow-hidden bg-ajaia-navy lg:flex lg:flex-col">
+      <div className="relative hidden w-[44%] shrink-0 overflow-hidden bg-inkwell-navy lg:flex lg:flex-col">
         <div
           className="absolute inset-0 opacity-[0.14]"
           style={{
@@ -66,7 +66,7 @@ export default function AuthShell({ title, subtitle, children, footer }: AuthShe
             </ul>
           </div>
 
-          <p className="text-sm text-white/35">© Ajaia Docs · Secure by design</p>
+          <p className="text-sm text-white/35">© Inkwell · Secure by design</p>
         </div>
       </div>
 
@@ -79,10 +79,10 @@ export default function AuthShell({ title, subtitle, children, footer }: AuthShe
           </div>
 
           <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-card">
-            <div className="h-1 bg-gradient-to-r from-ajaia-navy via-ajaia-navy-light to-ajaia-navy" />
+            <div className="h-1 bg-gradient-to-r from-inkwell-navy via-inkwell-navy-light to-inkwell-navy" />
             <div className="p-8 sm:p-10">
               <div className="mb-8">
-                <p className="text-xs font-semibold uppercase tracking-widest text-ajaia-navy">
+                <p className="text-xs font-semibold uppercase tracking-widest text-inkwell-navy">
                   Account access
                 </p>
                 <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">{title}</h1>

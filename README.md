@@ -1,4 +1,6 @@
-# Ajaia Docs — Production Ready Workspace
+# Inkwell — Production Ready Workspace
+
+> **Note:** Inkwell was originally built as Ajaia Docs, a timed hiring assessment for Ajaia. It is now an independent personal project and is not affiliated with or endorsed by Ajaia. Files in `docs/` keep the original name.
 
 A high performance, lightweight document editor built with Next.js 14, Firebase, and Tiptap. Engineered with a decoupled document persistence architecture, user targeted sharing indexes, and a 30 day soft delete lifecycle optimized for high velocity product teams.
 
@@ -41,7 +43,6 @@ Source code follows a layered Next.js structure. See **`docs/PROJECT_STRUCTURE.m
 | `types/` | Shared TypeScript interfaces |
 | `scripts/` | Dev tooling (seed, cache clean) |
 | `docs/` | Architecture, AI workflow, project structure |
-| `public/` | Static assets (`ajaia-logo.png`) |
 
 Supplementary documentation:
 
@@ -73,9 +74,9 @@ Open `.env.local` and populate the fields with your active Firebase Web App vari
 
 ```env
 NEXT_PUBLIC_FIREBASE_API_KEY=your_web_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=ajaia-docs-45934.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=ajaia-docs-45934
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=ajaia-docs-45934.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project-id.firebasestorage.app
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=265550196322
 NEXT_PUBLIC_FIREBASE_APP_ID=your_web_app_id
 
@@ -96,8 +97,8 @@ npm run seed
 
 ```
 
-* **User A (Owner Profile):** `alice@ajaia.dev` | Password: `Test1234!`
-* **User B (Collaborator Profile):** `bob@ajaia.dev` | Password: `Test1234!`
+* **User A (Owner Profile):** `alice@inkwell.test` | Password: `Test1234!`
+* **User B (Collaborator Profile):** `bob@inkwell.test` | Password: `Test1234!`
 
 ---
 

@@ -40,7 +40,7 @@ export default function ConfirmDialog({
             className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-white shadow-sm transition disabled:cursor-not-allowed disabled:opacity-60 ${
               destructive
                 ? 'bg-red-600 hover:bg-red-700'
-                : 'bg-ajaia-navy hover:bg-ajaia-navy-light'
+                : 'bg-inkwell-navy hover:bg-inkwell-navy-light'
             }`}
           >
             {loading ? 'Please wait...' : confirmLabel}

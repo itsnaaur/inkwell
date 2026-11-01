@@ -40,7 +40,7 @@ interface DocumentsContextValue {
 const DocumentsContext = createContext<DocumentsContextValue | undefined>(undefined)
 
 function getPurgeSessionKey(userId: string) {
-  return `ajaia-trash-purge-${userId}`
+  return `inkwell-trash-purge-${userId}`
 }
 
 function mapSharedWithMeDocuments(

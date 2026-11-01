@@ -1,5 +1,7 @@
 # AI Workflow & Engineering Judgment
 
+> **Note:** This document was written when the project was named Ajaia Docs. The project has since been renamed Inkwell.
+
 ## 1. Collaborative Engineering Tools
 
 * **Claude (Sonnet):** Leveraged for initial system design validation, rapid schema brainstorming, data modeling trade-offs, and security rule construction.

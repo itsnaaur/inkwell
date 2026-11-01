@@ -154,7 +154,7 @@ export default function ShareModal({ open, onClose, documentId }: ShareModalProp
       <div className="card w-full max-w-md p-6 shadow-card-hover">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-ajaia-navy-muted text-ajaia-navy">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-inkwell-navy-muted text-inkwell-navy">
               <Share2 className="h-5 w-5" strokeWidth={2} />
             </div>
             <div>
@@ -203,7 +203,7 @@ export default function ShareModal({ open, onClose, documentId }: ShareModalProp
 
         <div className="mt-6 border-t border-slate-100 pt-6">
           <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-            <Users className="h-4 w-4 text-ajaia-navy" strokeWidth={2} />
+            <Users className="h-4 w-4 text-inkwell-navy" strokeWidth={2} />
             Current shares
           </h3>
           {loadingShares ? (
@@ -217,7 +217,7 @@ export default function ShareModal({ open, onClose, documentId }: ShareModalProp
                   key={share.email}
                   className="flex items-center gap-3 rounded-xl bg-slate-50 px-3.5 py-2.5 text-sm text-slate-700"
                 >
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-ajaia-navy-muted text-ajaia-navy">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-inkwell-navy-muted text-inkwell-navy">
                     <Mail className="h-3.5 w-3.5" strokeWidth={2} />
                   </span>
                   {share.email}

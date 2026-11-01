@@ -185,7 +185,7 @@ export default function DocumentPage({ params }: DocumentPageProps) {
         <div className="min-w-0 flex-1">
           <Link
             href="/documents"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-ajaia-navy hover:underline"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-inkwell-navy hover:underline"
           >
             <ArrowLeft className="h-4 w-4" strokeWidth={2} />
             Back to documents
@@ -203,7 +203,7 @@ export default function DocumentPage({ params }: DocumentPageProps) {
                     event.currentTarget.blur()
                   }
                 }}
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-2xl font-semibold text-slate-900 shadow-sm outline-none focus:border-ajaia-navy focus:ring-2 focus:ring-ajaia-navy/10"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-2xl font-semibold text-slate-900 shadow-sm outline-none focus:border-inkwell-navy focus:ring-2 focus:ring-inkwell-navy/10"
               />
             ) : (
               <button

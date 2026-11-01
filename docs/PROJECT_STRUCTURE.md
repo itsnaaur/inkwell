@@ -1,5 +1,7 @@
 # Project Structure
 
+> **Note:** This document was written when the project was named Ajaia Docs. The project has since been renamed Inkwell.
+
 This document describes how the Ajaia Docs source code is organized for review and long-term maintenance.
 
 ```
@@ -38,7 +40,6 @@ ajaia/
 ├── scripts/                # Dev tooling (seed users, clean cache)
 ├── __tests__/              # Jest unit tests
 ├── docs/                   # Supplementary documentation for reviewers
-├── public/                 # Static assets served at /
 │
 ├── firestore.rules         # Security rules (publish manually in Firebase Console)
 ├── firestore.indexes.json

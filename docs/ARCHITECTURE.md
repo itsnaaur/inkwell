@@ -1,5 +1,7 @@
 # Architecture & Systems Design
 
+> **Note:** This document was written when the project was named Ajaia Docs. The project has since been renamed Inkwell.
+
 ## 1. System Overview
 
 Ajaia Docs is built as a single, highly optimized Next.js 14 application leveraging App Router route groups (`(auth)` and `(app)`) to isolate secure and public layout trees.
